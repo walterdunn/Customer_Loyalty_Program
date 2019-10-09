@@ -1,0 +1,14 @@
+public class FlexiblePersonComparator implements Comparator<Person> {
+  public enum Order {Name, Point, Entry}
+
+  private Order sortingBy = Name;
+
+  @Override
+  public int compare(Person person1, Person person2) {
+    switch(sortingBy) {
+      case Name: return person1.name.compareTo(person2.name);
+      case Point: return person1.point.compareTo(person2.point);
+      case Entry: return person1.entry.compareTo(person2.entry);
+    }
+    throw new RuntimeException("Practically unreachable code, can't be thrown");
+  }
