@@ -1,0 +1,138 @@
+/* 
+Contributed by Walter Dunn
+ */
+var text = '{ "customers" : [' +
+'{ "id":0 , "firstName":"John" , "lastName":"Doe" ,"points" : 0 , "status" : "Not Yet Assigned" },' +
+'{ "id":1 , "firstName":"Anna" , "lastName":"Smith" , "points" : 3000 , "status" : "Not Yet Assigned"},' +
+'{ "id":2 , "firstName":"Anna" , "lastName":"Smith" , "points" : 2500 , "status" : "Not Yet Assigned "},' +
+'{ "id":3 , "firstName":"Anna" , "lastName":"Smith" , "points" : 3000 , "status" : "Not Yet Assigned "},' +
+'{ "id":4, "firstName":"Peter" , "lastName":"Jones" , "points" : 7000 , "status": "Not Yet Assigned"} ]}';
+
+var obj = JSON.parse(text);
+var count = 0;
+var myJSON = JSON.stringify(obj);
+
+function createCustomers(){ 
+    var count = countCustomers();
+    var firstname = document.getElementById("firtsName").value;
+    var lastname = document.getElementById("lastName").value;
+    var points = document.getElementById("points").value;
+    x = firstname + lastname + points;
+    document.getElementById("list").innerHTML = x;
+    obj.customers.push({id:count,firstName:firstname,lastName:lastname,points:points, status: "Not Yet Assigned"});
+    count++;
+return alert ("New Customer Created");
+}
+
+function calcLoyaltyStatus () {
+  var i;
+    for(i in obj.customers){
+    if (obj.customers[i].points <= 1000){ 
+    obj.customers[i].status = "Silver"; 
+    }
+    else if (obj.customers[i].points > 1000 && obj.customers[i].points <= 5000){
+    obj.customers[i].status = "Gold"; 
+    }
+    else { 
+     obj.customers[i].status = "Platinum"; 
+    }
+  }
+}
+
+function compare(a, b) {
+  // Use toUpperCase() to ignore character casing
+  const lastnameA = a.lastName.toUpperCase();
+  const lastnameB = b.lastName.toUpperCase();
+  comparison = 0;
+  if (lastnameA > lastnameB) {
+    comparison = 1;
+  } else if (lastnameA < lastnameB) {
+    comparison = -1;
+  }
+  return comparison;
+}
+
+function displayCustomers(){
+    var x="";
+    var i;
+    count=0;
+    sortCustomers();
+    for (i in obj.customers){
+    x += obj.customers[i].id + " | "+obj.customers[i].firstName+ " | " +obj.customers[i].lastName + " | " +obj.customers[i].points + " | " +obj.customers[i].status + "<BR>";
+    count++;
+    }
+    document.getElementById("list").innerHTML = x;
+    return alert ("Success");
+}
+
+function searchCustomers(id){
+var y = "";
+var id = document.getElementById("customerId").value;
+//y += obj.customers[id].id + " "+obj.customers[id].firstName+ " " +obj.customers[id].lastName + " " +obj.customers[id].points + " " +obj.customers[id].status + "<BR>";
+document.getElementById("firstName").innerHTML = obj.customer[id].firtsName;
+document.getElementById("lastName").innerHTML = obj.customer[id].lastName;
+document.getElementById("points").innerHTML = obj.customer[id].points;
+}
+
+function sortCustomers(){
+obj.customers.sort(compare);
+}
+
+function editCustomers ({id,firstname,lastname,points}) {
+obj.customers[id].firstName = firstname;
+obj.customers[id].lastName = lastname;
+obj.customers[id].points = points;
+return alert ("Customer Updated");
+}
+
+function displayCustomersLoyalty() {
+ var silver, gold, platinum, nostatus="";
+ var i;
+ calcLoyaltyStatus();
+ for (i in obj.customers){
+ if (obj.customers[i].status === "Silver") {
+ silver += obj.customers[i].id + " | "+obj.customers[i].firstName+ " | " +obj.customers[i].lastName + " | " +obj.customers[i].points + " | " +obj.customers[i].status + "<BR>";
+ }
+ else if (obj.customers[i].status === "Gold"){
+ gold += obj.customers[i].id + " | "+obj.customers[i].firstName+ " | " +obj.customers[i].lastName + " | " +obj.customers[i].points + " | " +obj.customers[i].status + "<BR>";
+ }
+ else if (obj.customers[i].status === "Platinum"){
+ platinum += obj.customers[i].id + " | "+obj.customers[i].firstName+ " | " +obj.customers[i].lastName + " | " +obj.customers[i].points + " | " +obj.customers[i].status + "<BR>";
+ }
+ else {
+nostatus = obj.customers[i].id + " | "+obj.customers[i].firstName+ " | " +obj.customers[i].lastName + " | " +obj.customers[i].points + " | " +obj.customers[i].status + "<BR>";
+ }
+ }   
+ document.getElementById("list").innerHTML = "Silver:" + "<BR>"+ silver + "<BR>" + "Gold:" + "<BR>" + gold + "<BR>" + "Platinum:" + "<BR>" + platinum + "<BR>" + "No Status:" + "<BR>" + nostatus + "<BR>";
+ }
+ 
+function displayDuplicates(){
+    var x="";
+    var i,j;
+    var testvalue="";
+    var duplicatecount=0;
+    for (i in obj.customers){
+    testvalue = obj.customers[i].lastName;
+    for (j in obj.customer){
+    if (j!==i && testvalue === obj.customers[j].lastName){    
+    x += obj.customers[j].id + " "+obj.customers[j].firstName+ " " +obj.customers[j].lastName + " " +obj.customers[j].points + " " +obj.customers[j].status + "<BR>";
+    duplicatecount++;
+    }
+    }
+    if (duplicatecount > 0) {
+    return alert ("Duplicates Found");
+    document.getElementById("list").innerHTML = x;
+    }
+    else {
+    return alert ("No Duplicates Found");
+    }
+    }
+    }
+    
+    function countCustomers(){
+    var i;
+    count=0;
+    for (i in obj.customers){
+    count++;
+    }
+}
